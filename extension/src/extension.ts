@@ -32,8 +32,13 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
 
   proc = cp.spawn("pnpm", ["fastify", "start", "-l", "info", "dist/app.js"], {
-	stdio: 'inherit',
+	  stdio: 'inherit',
     cwd: path.resolve(__dirname, "../../server"),
+    shell: process.platform === 'win32',
+    windowsHide: true,
+  });
+  proc.on('error', (err) => {
+    console.error(err);
   });
 }
 
